@@ -17,21 +17,63 @@ python3 -m http.server 8000 --bind 0.0.0.0
 - PC 브라우저: `http://localhost:8000`
 - 모바일 브라우저(같은 와이파이): `http://<PC의_로컬_IP>:8000`
 
-> 예시: PC의 로컬 IP가 `192.168.0.15`면 모바일에서 `http://192.168.0.15:8000` 접속
-
-## 모바일에서 "직접" 호스팅하는 방법 (Android)
-안드로이드에서는 **Termux**로 직접 서버를 띄울 수 있습니다.
+## Termux에서 처음부터 다시 실행 (복붙용)
+아래를 **한 줄씩** 그대로 실행하면 됩니다.
 
 ```bash
-pkg update -y
-pkg install -y python git
-git clone <이_저장소_URL>
-cd <저장소_폴더>
-python -m http.server 8000 --bind 0.0.0.0
+pkg update -y && pkg upgrade -y
 ```
 
-- 같은 와이파이의 다른 기기에서 `http://<휴대폰_IP>:8000`으로 접속 가능
-- 본인 폰 브라우저에서는 `http://localhost:8000` 접속 가능
+```bash
+pkg install -y git python termux-api
+```
+
+```bash
+pkill -f "python -m http.server" || true
+```
+
+```bash
+rm -rf "$HOME/schedule-app"
+```
+
+```bash
+git clone -b main https://github.com/wonhokimbusy-netizen/test.git "$HOME/schedule-app"
+```
+
+```bash
+ls -la "$HOME/schedule-app/index.html"
+```
+
+```bash
+python -m http.server 8000 --bind 0.0.0.0 --directory "$HOME/schedule-app"
+```
+
+서버 실행 후, **새 Termux 탭**에서 IP 확인:
+
+```bash
+termux-wifi-connectioninfo
+```
+
+접속 주소:
+- 내 폰: `http://127.0.0.1:8000/index.html`
+- 다른 기기: `http://<위에서 나온 ip>:8000/index.html`
+
+## 자주 발생한 문제와 해결
+- 디렉토리 목록(`Directory listing for /`)만 보일 때
+  - 원인: `index.html`이 없는 폴더를 루트로 서빙 중
+  - 해결: `--directory "$HOME/schedule-app"`를 포함해 서버 실행
+
+- `ls: cannot access .../index.html: No such file or directory`
+  - 원인: 저장소가 다른 폴더에 있거나 clone 실패
+  - 해결: 위 복붙 순서대로 `rm -rf` 후 `git clone` 재실행
+
+- `Cannot bind netlink socket: Permission denied`
+  - 원인: 일부 환경에서 `ip` 명령 권한 제한
+  - 해결: `termux-wifi-connectioninfo`로 IP 확인
+
+- `0.0.0.0` 접속 불가
+  - 정상입니다. `0.0.0.0`은 바인딩 주소입니다.
+  - 실제 접속은 `127.0.0.1` 또는 `<실제 IP>`를 사용하세요.
 
 ## 외부 공개 호스팅(권장)
 모바일을 서버로 계속 켜두기 어렵기 때문에, 실제 운영은 아래가 더 좋습니다.
@@ -44,9 +86,3 @@ python -m http.server 8000 --bind 0.0.0.0
 1. 모바일 브라우저로 앱 접속
 2. 브라우저 메뉴에서 **홈 화면에 추가**
 3. 이후 아이콘으로 실행하면 앱(standalone)처럼 실행 가능
-
-## 다음 확장 추천
-- 로그인 + 팀 단위 권한
-- Firebase/Supabase 기반 실시간 동기화
-- 반복 일정/알림
-- 월간 캘린더 UI
