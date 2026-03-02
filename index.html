@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#3b6df6" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>일정공유 앱 기본 틀</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="icons/icon-192.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>📅 일정공유</h1>
+      <p>팀/가족과 일정을 한눈에 공유하는 앱 템플릿</p>
+    </header>
+
+    <main class="layout">
+      <section class="card">
+        <h2>새 일정 만들기</h2>
+        <form id="event-form" class="form-grid">
+          <label>
+            제목
+            <input name="title" type="text" placeholder="예: 주간 회의" required />
+          </label>
+          <label>
+            날짜
+            <input name="date" type="date" required />
+          </label>
+          <label>
+            시간
+            <input name="time" type="time" required />
+          </label>
+          <label>
+            참여자
+            <input name="members" type="text" placeholder="예: 민수, 지연" />
+          </label>
+          <label class="full">
+            메모
+            <textarea name="note" rows="3" placeholder="추가 설명"></textarea>
+          </label>
+          <button type="submit">일정 추가</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="section-header">
+          <h2>공유 일정 목록</h2>
+          <button id="clear-btn" class="ghost">전체 삭제</button>
+        </div>
+        <ul id="event-list" class="event-list"></ul>
+      </section>
+
+      <section class="card">
+        <h2>다음 구현 아이디어</h2>
+        <ul class="ideas">
+          <li>사용자 로그인/권한 (Google OAuth, 카카오 로그인)</li>
+          <li>팀별 캘린더 분리 및 색상 태그</li>
+          <li>반복 일정, 알림(푸시/이메일) 기능</li>
+          <li>월/주/일 캘린더 뷰와 드래그 앤 드롭</li>
+          <li>Firestore/Supabase 연동으로 실시간 공유</li>
+        </ul>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
